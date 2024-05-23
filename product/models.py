@@ -32,6 +32,11 @@ class Product(models.Model):
     def save(self,*args,**kwargs):
         self.slug=slugify(self.name)
         super(Product,self).save(*args,**kwargs)
+
+    @property
+    def review_count(self):
+        reviews=self.review_product.all().count()
+        return reviews
     
 class Brand(models.Model):
     name=models.CharField(max_length=120,verbose_name=_('name'))
