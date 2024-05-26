@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django_summernote',
     'rest_framework',
     'drf_yasg',
+    
+
 
     # my apps
     'product'
@@ -167,6 +169,7 @@ AUTHENTICATION_BACKENDS=[
     'accounts.backend.Login_Email_UserName'
 ]
 
+LOGIN_REDIRECT_URL = '/'
 
 
 
