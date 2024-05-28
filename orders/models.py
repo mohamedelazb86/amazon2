@@ -14,7 +14,7 @@ STATUS_ORDER=[
     ]
 class Order(models.Model):
     user=models.ForeignKey(User,related_name='order_user',on_delete=models.SET_NULL,null=True,blank=True)
-    status=models.CharField(max_length=50,choices=STATUS_ORDER)
+    status=models.CharField(max_length=50,choices=STATUS_ORDER,default='Recieved')
     code=models.CharField(max_length=50,default=generate_code)
     order_time=models.DateTimeField(default=timezone.now)
     delivery_time=models.DateTimeField(null=True,blank=True)
@@ -47,9 +47,16 @@ class  Cart(models.Model):
     user=models.ForeignKey(User,related_name='cart_user',on_delete=models.SET_NULL,null=True,blank=True)
     status=models.CharField(max_length=50,choices=STATUS_CART)
     
-    copoun=models.ForeignKey('Copoun',related_name='cart_copoun',on_delete=models.CASCADE)
+    copoun=models.ForeignKey('Copoun',related_name='cart_copoun',on_delete=models.SET_NULL,null=True,blank=True)
     
     total_with_copoun=models.FloatField(null=True,blank=True)
+
+    @property
+    def total_cart(self):
+        total=0
+        for item in self.detatil_cart.all():
+            total += item.total
+        return total
 
 class Cart_Detail(models.Model):
     cart=models.ForeignKey(Cart,related_name='detatil_cart',on_delete=models.CASCADE)
@@ -65,6 +72,9 @@ class Copoun(models.Model):
     end_date=models.DateField(null=True,blank=True)
     quantity=models.FloatField()
     discount=models.FloatField()
+
+    def __str__(self):
+        return str(self.code)
 
     def save(self,*args,**kwargs):
         week=timezone.timedelta(days=7)
