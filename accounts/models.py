@@ -20,4 +20,15 @@ def create_profile(sender,instance,created,**kwargs):
         Profile.objects.create(
             user=instance
         )
+
+
+ADDRESS_TYPE=[
+    ('Home','Home'),
+    ('Work','Work'),
+    ('Others','Others'),
+    ]
+class Address(models.Model):
+    user=models.ForeignKey(User,related_name='address_user',on_delete=models.CASCADE)
+    address=models.CharField(max_length=350)
+    address_type=models.CharField(max_length=50,choices=ADDRESS_TYPE)
     
